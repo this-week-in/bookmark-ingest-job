@@ -39,5 +39,5 @@ jobs:
           key: ${{ runner.os }}-m2
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Run
-        run: $GITHUB_WORKSPACE/.github/workflows/run.sh
+#       - name: Run
+#         run: $GITHUB_WORKSPACE/.github/workflows/run.sh
