@@ -38,7 +38,7 @@ class Step1Configuration(
     val sinceInstant: Instant = Instant.now().minusMillis(refreshDaysInMillis)
     val result: Int = this.bookmarkService.countBookmarksSince(Date(sinceInstant.toEpochMilli()))
     val startDate: Date =
-        if (result is Int && result > 0) {
+        if (result > 0) {
           Date(sinceInstant.toEpochMilli())
         } else {
           Date(Instant.parse(this.ingestProperties.startDate).toEpochMilli())
