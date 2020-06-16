@@ -44,6 +44,9 @@ class Step1Configuration(
           Date(Instant.parse(this.ingestProperties.startDate).toEpochMilli())
         }
     log.info("the start date will be $startDate")
+    log.info("the tag to ingest is ${this.ingestProperties.tags.joinToString(",")}")
+    log.info("the ingested tag is ${this.ingestProperties.ingestedTag}")
+
     return PinboardBookmarkItemReader(
         { !it.tags.contains(this.ingestProperties.ingestedTag) },
         this.pinboardClient,
