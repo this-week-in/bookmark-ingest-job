@@ -28,23 +28,31 @@ open class PinboardBookmarkItemReader(
 
   private fun loadBookmarksForPeriod(from: Date, to: Date, ending: Boolean): Collection<Bookmark> {
     val spanString = rangeString(from, to)
-    if (log.isDebugEnabled) {
-      log.debug(spanString)
-    }
-    return this.retryTemplate.execute<List<Bookmark>, NoNewsException>({
-      val results: List<Bookmark> = this.pinboardClient
-          .getAllPosts(tag = this.tags, fromdt = from, todt = to)
-          .asList()
-      if (results.isEmpty() && !ending) {
-        val msg = "received NO results for the span ${spanString}."
-        log.warn(msg)
-        throw NoNewsException(msg)
-      }
-      results.filter(this.filter)
-    }, {
-      log.info("returning an empty list for ${spanString}.")
-      emptyList()
-    })
+
+    log.info("attempting to fetch results for $spanString.")
+    log.info("the retryTemplate is thusly configured: ${retryTemplate}.")
+    return this.retryTemplate
+        .execute<List<Bookmark>, NoNewsException>({
+
+          log.info("attempting to fetch posts ${this.tags} from ${from} to ${to}")
+
+          val results: List<Bookmark> = this.pinboardClient
+              .getAllPosts(tag = this.tags, fromdt = from, todt = to)
+              .asList()
+
+          log.info("results size: ${results.size}")
+
+          if (results.isEmpty() && !ending) {
+            val msg = "received NO results for the span ${spanString}."
+            log.warn(msg)
+            throw NoNewsException(msg)
+          }
+          results.filter(this.filter)
+
+        }, {
+          log.info("returning an empty list for ${spanString}.")
+          emptyList()
+        })
   }
 
   private fun replenish(arrayDeque: ArrayDeque<Bookmark>): ArrayDeque<Bookmark> {
