@@ -44,16 +44,19 @@ open class PinboardBookmarkItemReader(
             log.info("results size: ${results.size}. Is Ending? ${ending}. Results are empty? ${results.isEmpty()}")
 
             if (results.isEmpty() && !ending) {
-              log.info ( "there are no new news results to add")
+              log.info("there are no new news results to add")
               val msg = "received NO results for the span ${spanString}."
               log.warn(msg)
               throw NoNewsException(msg)
             }
+            log.info("-------------------------")
+            results.forEach {
+              println("${it.href} ${it.description}")
+            }
             val filtered = results.filter(this.filter)
             log.info("filtered size: ${filtered.size}")
             filtered
-          }
-          catch (e: Throwable) {
+          } catch (e: Throwable) {
             log.error("couldn't fetch! Returning an empty list.", e)
             emptyList<Bookmark>()
           }
