@@ -34,7 +34,7 @@ open class PinboardBookmarkItemReader(
     return this.retryTemplate
         .execute<List<Bookmark>, NoNewsException>({
 
-          log.info("attempting to fetch posts ${this.tags} from ${from} to ${to}")
+          log.info("attempting to fetch posts ${this.tags.joinToString(",")} from ${from} to ${to}")
 
           val results: List<Bookmark> = this.pinboardClient
               .getAllPosts(tag = this.tags, fromdt = from, todt = to)
@@ -47,8 +47,9 @@ open class PinboardBookmarkItemReader(
             log.warn(msg)
             throw NoNewsException(msg)
           }
-          results.filter(this.filter)
-
+          val filtered = results.filter(this.filter)
+          log.info  ("filtered size: ${filtered.size}")
+          filtered
         }, {
           log.info("returning an empty list for ${spanString}.")
           emptyList()
