@@ -49,7 +49,11 @@ class Step1Configuration(
     log.info("the ingested tag is ${this.ingestProperties.ingestedTag}")
 
     return PinboardBookmarkItemReader(
-        { !it.tags.contains(this.ingestProperties.ingestedTag) },
+        {
+          val result = !it.tags.contains(this.ingestProperties.ingestedTag)
+          log.info ( "does ${it.href} contain ${it.tags.joinToString(",").reversed()} tags? ${result}")
+          result
+        },
         this.pinboardClient,
         this.retryTemplate(),
         startDate,
