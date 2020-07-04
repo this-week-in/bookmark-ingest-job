@@ -49,10 +49,16 @@ class Step1Configuration(
     log.info("the ingested tag is ${this.ingestProperties.ingestedTag}")
 
     return PinboardBookmarkItemReader(
-        {
-          val result = !it.tags.contains(this.ingestProperties.ingestedTag)
-          log.info ( "does ${it.href} with tags ${it.tags.joinToString(",").reversed()} contain ${this.ingestProperties.ingestedTag.reversed()}? ${result}")
-          result
+        { bookmark ->
+          val result = bookmark.tags.filter { it.toLowerCase().contentEquals(this.ingestProperties.ingestedTag.trim().toLowerCase()) }.isNotEmpty() //.contains(this.ingestProperties.ingestedTag.trim())
+          log.info(
+              """ 
+                  does ${bookmark.href} with tags ${bookmark.tags.joinToString(",").reversed()}
+                  contain ${this.ingestProperties.ingestedTag.reversed()}? ${result}. 
+                  If TRUE, this means we are _NOT_ keeping it.
+              """
+          )
+          !result
         },
         this.pinboardClient,
         this.retryTemplate(),
