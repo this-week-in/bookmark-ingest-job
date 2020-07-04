@@ -43,6 +43,7 @@ class Step1Configuration(
         } else {
           Date(Instant.parse(this.ingestProperties.startDate).toEpochMilli())
         }
+    log.info("now is $nowDate")
     log.info("the start date will be $startDate")
     log.info("the tag to ingest is ${this.ingestProperties.tags.joinToString(",")}")
     log.info("the ingested tag is ${this.ingestProperties.ingestedTag}")
