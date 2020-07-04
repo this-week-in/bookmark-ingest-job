@@ -34,22 +34,29 @@ open class PinboardBookmarkItemReader(
     return this.retryTemplate
         .execute<List<Bookmark>, NoNewsException>({
 
-          log.info("attempting to fetch posts ${this.tags.joinToString(",")} from ${from} to ${to}")
+          try {
+            log.info("attempting to fetch posts ${this.tags.joinToString(",")} from ${from} to ${to}")
 
-          val results: List<Bookmark> = this.pinboardClient
-              .getAllPosts(tag = this.tags, fromdt = from, todt = to)
-              .asList()
+            val results: List<Bookmark> = this.pinboardClient
+                .getAllPosts(tag = this.tags, fromdt = from, todt = to)
+                .asList()
 
-          log.info("results size: ${results.size}")
+            log.info("results size: ${results.size}. Is Ending? ${ending}. Results are empty? ${results.isEmpty()}")
 
-          if (results.isEmpty() && !ending) {
-            val msg = "received NO results for the span ${spanString}."
-            log.warn(msg)
-            throw NoNewsException(msg)
+            if (results.isEmpty() && !ending) {
+              log.info ( "there are no new news results to add")
+              val msg = "received NO results for the span ${spanString}."
+              log.warn(msg)
+              throw NoNewsException(msg)
+            }
+            val filtered = results.filter(this.filter)
+            log.info("filtered size: ${filtered.size}")
+            filtered
           }
-          val filtered = results.filter(this.filter)
-          log.info  ("filtered size: ${filtered.size}")
-          filtered
+          catch (e: Throwable) {
+            log.error("couldn't fetch! Returning an empty list.", e)
+            emptyList<Bookmark>()
+          }
         }, {
           log.info("returning an empty list for ${spanString}.")
           emptyList()
