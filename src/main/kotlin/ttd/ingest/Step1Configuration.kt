@@ -51,7 +51,7 @@ class Step1Configuration(
     return PinboardBookmarkItemReader(
         {
           val result = !it.tags.contains(this.ingestProperties.ingestedTag)
-          log.info ( "does ${it.href} contain ${it.tags.joinToString(",").reversed()} tags? ${result}")
+          log.info ( "does ${it.href} with tags ${it.tags.joinToString(",").reversed()} contain ${this.ingestProperties.ingestedTag.reversed()}? ${result}")
           result
         },
         this.pinboardClient,
