@@ -50,11 +50,11 @@ class Step1Configuration(
 
     return PinboardBookmarkItemReader(
         { bookmark ->
-          val result = bookmark.tags.filter { it.toLowerCase().contentEquals(this.ingestProperties.ingestedTag.trim().toLowerCase()) }.isNotEmpty() //.contains(this.ingestProperties.ingestedTag.trim())
+          val result = bookmark.tags.filter { it.toLowerCase().contentEquals(this.ingestProperties.ingestedTag.trim().toLowerCase()) }.isNotEmpty()
           log.info(
               """ 
-                  does ${bookmark.href} with tags ${bookmark.tags.joinToString(",").reversed()}
-                  contain ${this.ingestProperties.ingestedTag.reversed()}? ${result}. 
+                  does ${bookmark.href} with tags ${bookmark.tags.joinToString(",") }
+                  contain ${ this.ingestProperties.ingestedTag }? ${result}. 
                   If TRUE, this means we are _NOT_ keeping it.
               """
           )
