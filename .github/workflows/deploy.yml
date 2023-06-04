@@ -2,20 +2,20 @@ name: API
 
 env:
 
-  GKE_CLUSTER:   ${{ secrets.GKE_CLUSTER }}
-  GCLOUD_ZONE:  ${{ secrets.GCLOUD_ZONE }}
-  GCLOUD_SA_KEY:  ${{ secrets.GCLOUD_SA_KEY }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+  GCLOUD_ZONE: ${{ secrets.GCLOUD_ZONE }}
+  GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
   PINBOARD_TOKEN: ${{ secrets.PINBOARD_TOKEN }}
   ARTIFACTORY_API_TOKEN_SECRET: ${{ secrets.ARTIFACTORY_API_TOKEN_SECRET }}
   ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME  }}
   ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD  }}
-  
+
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-    
+
 jobs:
 
   build:
