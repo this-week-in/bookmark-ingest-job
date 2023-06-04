@@ -1,9 +1,10 @@
 name: API
 
 env:
-
+  APP_NAME: bookmark-editor-view
   GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
   GCLOUD_ZONE: ${{ secrets.GCLOUD_ZONE }}
+  NS_NAME: ${{ secrets.NS_NAME }}
   GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
   PINBOARD_TOKEN: ${{ secrets.PINBOARD_TOKEN }}
   ARTIFACTORY_API_TOKEN_SECRET: ${{ secrets.ARTIFACTORY_API_TOKEN_SECRET }}
@@ -23,6 +24,14 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
 
       - uses: 'google-github-actions/auth@v0'
         with:
